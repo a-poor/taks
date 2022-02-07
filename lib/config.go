@@ -6,26 +6,23 @@ import (
 )
 
 const (
-	ConfigDirName = ".taks/"      // The name of the directory for the config file
-	ConfigFile    = "config.yaml" // The filename for storing app config data
-	DataFile      = "data.db"     // The filename for storing app data
+	ConfigDirName = ".taks/"
 )
 
-// AppConfig stores the user's configuration
-// for the application.
-type AppConfig struct {
-	Path string // Location of the taks data directory
-}
-
-func NewAppConfig(p string) (*AppConfig, error) {
-	if p == "" {
-		var err error
-		p, err = os.UserHomeDir()
-		if err != nil {
-			return nil, err
-		}
+// GetConfigDir returns the path to the config directory
+// where the database should be stored. `p` is the path
+// to the parent directory, in which the config directory
+// will be named after `ConfigDirName`. If `p` is empty,
+// the config directory will be created in the user's
+// home directory (per `os.UserHomeDir()`).
+func GetConfigDir(p string) (string, error) {
+	if p != "" {
+		return path.Join(p, ConfigDirName), nil
 	}
-	d := path.Join(p, ConfigDirName)
-	cfg := &AppConfig{Path: d}
-	return cfg, nil
+
+	homedir, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	return path.Join(homedir, ConfigDirName), nil
 }

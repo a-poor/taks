@@ -20,8 +20,12 @@ type Task struct {
 }
 
 func NewTask(name string) *Task {
+	// Task ID is a UUID prefixed with "task-" to avoid collisions
+	// and allow for easy sorting.
+	id := "task-" + uuid.New().String()
+
 	return &Task{
-		ID:          uuid.NewString(),
+		ID:          id,
 		Name:        name,
 		Details:     "",
 		CreatedAt:   time.Now(),
