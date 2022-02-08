@@ -12,6 +12,7 @@ type TaksDB struct {
 
 func OpenDB(path string) (*TaksDB, error) {
 	opt := badger.DefaultOptions(path)
+	opt.Logger = nil // TODO: Currently removing the logger. Update this?
 	db, err := badger.Open(opt)
 	if err != nil {
 		return nil, err
@@ -64,5 +65,46 @@ func (db *TaksDB) PutTask(t Task) error {
 func (db *TaksDB) DeleteTask(id string) error {
 	return db.DB.Update(func(txn *badger.Txn) error {
 		return txn.Delete([]byte(id))
+	})
+}
+
+func (db *TaksDB) GetMetadata() (*AppMetadata, error) {
+	var m *AppMetadata
+	err := db.DB.View(func(txn *badger.Txn) error {
+		// Get the value for the given key.
+		item, err := txn.Get(MetadataID)
+		if err != nil {
+			return err
+		}
+
+		// Read the value from the item, if no error occurred.
+		err = item.Value(func(val []byte) error {
+			m, err = MetadataFromBytes(val)
+			return err
+		})
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// Return the unmarshaled metadata.
+	return m, nil
+}
+
+func (db *TaksDB) PutMetadata(m *AppMetadata) error {
+	id, body, err := m.MarshalBytes()
+	if err != nil {
+		return err
+	}
+	return db.DB.Update(func(txn *badger.Txn) error {
+		return txn.Set(id, body)
+	})
+}
+
+func (db *TaksDB) DeleteMetadata() error {
+	return db.DB.Update(func(txn *badger.Txn) error {
+		return txn.Delete(MetadataID)
 	})
 }
