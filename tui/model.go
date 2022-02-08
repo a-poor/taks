@@ -1,12 +1,19 @@
 package tui
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	"github.com/a-poor/taks/lib"
+	tea "github.com/charmbracelet/bubbletea"
+)
 
 type model struct {
+	db *lib.TaksDB // Stores the connection to the task DB
 }
 
-func NewModel() *model {
-	return &model{}
+// NewModel creates a new bubbletea TUI model.
+func NewModel(db *lib.TaksDB) *model {
+	return &model{
+		db: db,
+	}
 }
 
 func (m *model) Init() tea.Cmd {
