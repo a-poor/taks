@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/urfave/cli/v2"
 )
 
@@ -18,9 +16,6 @@ func NewApp() *cli.App {
 				Action: cliInit,
 			},
 		},
-		Action: func(c *cli.Context) error {
-			fmt.Println("Running the root command...")
-			return nil
-		},
+		Action: cliRoot,
 	}
 }
