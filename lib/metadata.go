@@ -17,6 +17,15 @@ func NewMetadata() *AppMetadata {
 	}
 }
 
+func MetadataFromBytes(b []byte) (*AppMetadata, error) {
+	var m *AppMetadata
+	err := json.Unmarshal(b, m)
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (m *AppMetadata) MarshalBytes() (id []byte, body []byte, err error) {
 	body, err = json.Marshal(m)
 	if err != nil {
