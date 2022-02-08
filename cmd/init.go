@@ -9,6 +9,9 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+const initDesc = `Initializes a new task database. If one already exists
+the user will be prompted to overwrite it.`
+
 // cliInit corresponds to the CLI's init command.
 // It initializes the taks database and prepares it for use.
 func cliInit(c *cli.Context) error {
