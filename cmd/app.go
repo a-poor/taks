@@ -6,7 +6,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// newApp creates the taks CLI application to be run.
+// NewApp creates the taks CLI application to be run.
 func NewApp() *cli.App {
 	return &cli.App{
 		Name:  "taks",
