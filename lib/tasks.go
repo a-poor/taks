@@ -7,31 +7,44 @@ import (
 	"github.com/google/uuid"
 )
 
+// TaskPriority is an enum for the priority of a task.
+type TaskPriority uint32
+
+const (
+	TaskPriorityNotSet   TaskPriority = iota // An unset priority.
+	TaskPriorityVeryHigh                     // Very high priority.
+	TaskPriorityHigh                         // High priority.
+	TaskPriorityMedium                       // Medium priority.
+	TaskPriorityLow                          // Low priority.
+	TaskPriorityVeryLow                      // Very low priority.
+)
+
+// Task stores data connected to a single task in the user's task list.
 type Task struct {
-	ID          string
-	Name        string
-	Details     string `json:",omitempty"`
-	Project     string `json:",omitempty"`
-	Status      string `json:",omitempty"`
-	CreatedAt   time.Time
-	DueAt       *time.Time `json:",omitempty"`
-	CompletedAt *time.Time `json:",omitempty"`
-	Tags        []string
+	ID          string       `json:"id"`                    // Unique ID for the task, used as the DB key
+	Name        string       `json:"name"`                  // Name of the task & main text
+	Details     string       `json:"details,omitempty"`     // Optional task details
+	Project     string       `json:"project,omitempty"`     // Optional project name associated with the task
+	Status      string       `json:"status,omitempty"`      // Optional task status
+	Priority    TaskPriority `json:"priority,omitempty"`    // Optional task priority (Priority scale: 1-5; 1 is the highest; 0 means not set)
+	CreatedAt   time.Time    `json:"createdAt"`             // Timestamp of the task creation
+	DueAt       *time.Time   `json:"dueAt,omitempty"`       // Optional due date for the task
+	CompletedAt *time.Time   `json:"completedAt,omitempty"` // Optional completion timestamp
+	Tags        []string     `json:"tags"`                  // Optional list of tags associated with the task
 }
 
+// NewTask creates a new Task with the supplied name, an auto-generated ID and
+// creation timestamp, and nil values for the remaining fields.
 func NewTask(name string) *Task {
 	// Task ID is a UUID prefixed with "task-" to avoid collisions
 	// and allow for easy sorting.
 	id := "task-" + uuid.New().String()
 
 	return &Task{
-		ID:          id,
-		Name:        name,
-		Details:     "",
-		CreatedAt:   time.Now(),
-		DueAt:       nil,
-		CompletedAt: nil,
-		Tags:        []string{},
+		ID:        id,
+		Name:      name,
+		CreatedAt: time.Now(),
+		Tags:      []string{},
 	}
 }
 
