@@ -8,8 +8,8 @@ import (
 
 const rootDesc = ``
 
-// cliRoot runns the root CLI command
-func cliRoot(c *cli.Context) error {
+// rootFunc runns the root CLI command
+func rootFunc(c *cli.Context) error {
 	fmt.Println("Running the root command...")
 	return nil
 }

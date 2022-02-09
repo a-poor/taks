@@ -19,25 +19,10 @@ func NewApp() *cli.App {
 		Copyright:   "Copyright (c) 2022 Austin Poor",
 		Description: rootDesc,
 		Commands: []*cli.Command{
-			{
-				Name:        "init",
-				Usage:       "Initialize the taks database.",
-				Description: initDesc,
-				Action:      cliInit,
-			},
-			{
-				Name:        "new",
-				Usage:       "Create a new task.",
-				Description: newDesc,
-				Action:      cliNew,
-			},
-			{
-				Name:        "list",
-				Usage:       "Show tasks from the user's task-list.",
-				Description: listDesc,
-				Action:      cliList,
-			},
+			initCmd,
+			newCmd,
+			listCmd,
 		},
-		Action: cliRoot,
+		Action: rootFunc,
 	}
 }

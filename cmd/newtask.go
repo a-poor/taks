@@ -4,8 +4,13 @@ import "github.com/urfave/cli/v2"
 
 const newDesc = ``
 
-// cliNew corresponds to the CLI's new command.
+// newCmd corresponds to the CLI's new command.
 // It creates a new task and adds it to the database.
-func cliNew(c *cli.Context) error {
-	return nil
+var newCmd = &cli.Command{
+	Name:        "new",
+	Usage:       "Create a new task and add it to the user's task-list.",
+	Description: newDesc,
+	Action: func(c *cli.Context) error {
+		return nil
+	},
 }
