@@ -7,6 +7,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const TaskPrefix = "task-"
+
 // TaskPriority is an enum for the priority of a task.
 type TaskPriority uint32
 
@@ -38,7 +40,7 @@ type Task struct {
 func NewTask(name string) *Task {
 	// Task ID is a UUID prefixed with "task-" to avoid collisions
 	// and allow for easy sorting.
-	id := "task-" + uuid.New().String()
+	id := TaskPrefix + uuid.New().String()
 
 	return &Task{
 		ID:        id,
@@ -50,12 +52,12 @@ func NewTask(name string) *Task {
 
 // TaskFromBytes unmarshals the given byte slices into a Task.
 func TaskFromBytes(b []byte) (*Task, error) {
-	var t *Task
-	err := json.Unmarshal(b, t)
+	var t Task
+	err := json.Unmarshal(b, &t)
 	if err != nil {
 		return nil, err
 	}
-	return t, nil
+	return &t, nil
 }
 
 func (t *Task) String() string {
